@@ -9,6 +9,10 @@ use App\Http\Resources\Product\ProductCollection;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('index','show');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -37,7 +41,23 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validateData = $request->validate([
+            'name' => 'required',
+            'price' => 'required',
+            'description' => 'required',
+            'stock' => 'required',
+            'discount' => 'required',
+        ]);
+        $product = new Product;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->detail = $request->description;
+        $product->stock = $request->stock;
+        $product->discount = $request->discount;
+        $product->save();
+        return response([
+            'data'=>new ProductResource($product),
+        ],201);
     }
 
     /**
