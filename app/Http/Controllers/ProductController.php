@@ -68,7 +68,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        return new ProductResource($product);
+        $data = Product::find($product->id);
+        return response()->json($data,200);
     }
 
     /**
