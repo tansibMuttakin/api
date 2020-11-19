@@ -47,6 +47,10 @@ class ReviewController extends Controller
             'star'=>'required|integer|between:0,5',
             'body'=>'required'
         ]);
+
+        // $review = $request->all();
+        // $product->reviews()->save($review);
+
         $review = new Review;
         $review->product_id = $product->id;
         $review->customer = $request->customer;
@@ -65,9 +69,12 @@ class ReviewController extends Controller
      * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function show(Review $review)
+    public function show(Product $product,Review $review)
     {
-        //
+        $review = Review::find($review->id);
+        return response([
+            "data"=>new ReviewResource($review)
+        ],200);
     }
 
     /**
@@ -88,9 +95,12 @@ class ReviewController extends Controller
      * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Review $review)
+    public function update(Request $request,Product $product, Review $review)
     {
-        
+        $review->update($request->all());
+        return response([
+            "data"=>new ReviewResource($review)
+        ],201);
     }
 
     /**
@@ -99,8 +109,11 @@ class ReviewController extends Controller
      * @param  \App\Models\Review  $review
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Review $review)
+    public function destroy(Product $product,Review $review)
     {
-        //
+        $review->delete();
+        return response([
+            "message"=>"review deleted"
+        ]);
     }
 }
