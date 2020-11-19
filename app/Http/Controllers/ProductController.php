@@ -92,6 +92,11 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        if (auth()->id()!= $product->user_id) {
+            return response([
+                'message'=>"this product does not belong to current user",
+            ]);
+        }
         $request['detail'] = $request->description;
         unset($request['description']);
         $product->update($request->all());
@@ -108,9 +113,14 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if (auth()->id()!= $product->user_id) {
+            return response([
+                'message'=>"operation failed.This product does not belong to current user",
+            ]);
+        }
         $product->delete();
         return response([
             'message'=>'product deleted',
-        ],204);
+        ]);
     }
 }
