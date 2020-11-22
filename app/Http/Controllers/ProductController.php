@@ -49,6 +49,7 @@ class ProductController extends Controller
             'discount' => 'required',
         ]);
         $product = new Product;
+        $product->user_id = auth()->id();
         $product->name = $request->name;
         $product->price = $request->price;
         $product->detail = $request->description;
